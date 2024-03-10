@@ -13,15 +13,6 @@ public class Test_GUI {
 
 	private SOS_GUI GUI;
 	
-	@Before
-	public void setUp() throws Exception {
-		GUI = new SOS_GUI();  //initialize GUI object
-	}
-	
-	@After
-	public void tearDown() throws Exception {
-		
-	}
 	
 	@Test
 	public void test() {
