@@ -289,27 +289,31 @@ public class SOS_GUI extends JFrame implements ActionListener {
     class GameBoardCanvas extends JPanel {
 
         GameBoardCanvas() {
-            addMouseListener(new MouseAdapter() {
+            addMouseListener(new MouseAdapter() {               //mouse listener to handle user clicks
                 public void mouseClicked(MouseEvent e) {
                     String blue = player_typeBlue.getSelection().getActionCommand();
                     String red = player_typeRed.getSelection().getActionCommand();
 
+                    //calculate row & column selected based on mouse click coords.
                 	int rowSelected = e.getY() / CELL_SIZE;
                     int colSelected = e.getX() / CELL_SIZE;
-                    if (game.getGameState() == GameState.PLAYING) {                       
+                    
+                    if (game.getGameState() == GameState.PLAYING) {  
+                    	
+                    	//check which player's turn it is and handle moves accordingly
                     	if (game.getTurn()=='B') {
                     		if (blue.equals("Human"))
                     			game.makeMove(rowSelected, colSelected);
-                    		//implement computer moves here in an else if
+                    		//implement computer player moves here in an else if  (will do later)
                     		}
                     	else if (game.getTurn()=='R') {
                     		if (red.equals("Human"))
             					game.makeMove(rowSelected, colSelected);
-                    		//implement computer moves here in an else if
+                    		//implement computer player moves here in an else if (will do later)
                     	}
-                        game.updateState();
+                        game.updateState();      //update game state after the move
                     } else {
-                        game.initBoard();
+                        game.initBoard();   //if game is not ongoing, initialize board for a new game
                     }
                     repaint();
                 }
@@ -319,19 +323,23 @@ public class SOS_GUI extends JFrame implements ActionListener {
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            setBackground(new Color(145, 225, 250));  //cell color is a light blue
-            drawGridLines(g);               //call function to draw grid
+            setBackground(new Color(145, 225, 250));  //cell color of board is a light blue
+            drawGrid(g);               //call function to draw grid lines
             drawBoard(g);                  
             graph = g; 
             printStatusBar();
         }
 
-        private void drawGridLines(Graphics g) {
-            g.setColor(Color.BLACK);
+        private void drawGrid(Graphics g) {
+            g.setColor(Color.BLACK);                   //color of grid lines
+            
+            //draw horizontal grid lines
             for (int row = 1; row < game.size + 1; row++) {
             	g.fillRoundRect(0, CELL_SIZE * row - GRID_WIDTH_HALF, 
             			CELL_SIZE * game.size - 1, GRID_WIDTH, GRID_WIDTH, GRID_WIDTH);
             }
+            
+            //draw vertical grid lines
             for (int col = 1; col < game.size+ 1; col++) {
                 g.fillRoundRect(CELL_SIZE * col - GRID_WIDTH_HALF, 0, GRID_WIDTH,
 						CELL_SIZE * game.size - 1, GRID_WIDTH, GRID_WIDTH);
@@ -339,19 +347,20 @@ public class SOS_GUI extends JFrame implements ActionListener {
         }
        
         private void drawBoard(Graphics g) {
-            Graphics2D g2d = (Graphics2D) g;
+            Graphics2D graph_2d = (Graphics2D) g;
             for (int row = 0; row < game.size; row++) {
                 for (int col = 0; col < game.size; col++) {
                     int x1 = col * CELL_SIZE + CELL_PADDING;
 					int y2 = (row + 1) * CELL_SIZE - CELL_PADDING;
 					if (game.getCell(row, col) == Cell.S) {
-                        g2d.setColor(Color.black);
-                        g2d.setFont(new Font("Comic Sans", Font.BOLD, 20));
-                        g2d.drawString("S", x1, y2);   
-                    } else if (game.getCell(row, col) == Cell.O) {
-                        g2d.setColor(Color.black);
-                        g2d.setFont(new Font("Comic Sans", Font.BOLD, 20));
-                        g2d.drawString("O", x1, y2);
+                        graph_2d.setColor(Color.black);
+                        graph_2d.setFont(new Font("Comic Sans", Font.BOLD, 20));
+                        graph_2d.drawString("S", x1, y2);   
+                    } 
+					else if (game.getCell(row, col) == Cell.O) {
+                        graph_2d.setColor(Color.black);
+                        graph_2d.setFont(new Font("Comic Sans", Font.BOLD, 20));
+                        graph_2d.drawString("O", x1, y2);
                     }
                 }
             }
