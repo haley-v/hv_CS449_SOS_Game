@@ -18,27 +18,26 @@ public class Test_Gameboard {
 	
 	private SOS_board b;
 
-
+	/*
+	 * Need to rewrite tests.
+	 * experiencing errors
+	 */
+	
 	//check initialization of the board
 	@Test
-	public void testInitBoard() {
-		assertEquals(GameState.PLAYING, GameState());
+	public void testInitialBoard() {
+		
+		//assert that the initial game state is PLAYING and the initial turn is 'B'
+		assertEquals(GameState.PLAYING, b.getGameState());
         assertEquals('B', b.getTurn());
         
-        assertEquals(Cell.EMPTY, getCell(0,0));
-        assertEquals(Cell.EMPTY, getCell(1,1));
+        //assert that the cells at specific positions are EMPTY after board initialization
+        assertEquals(Cell.EMPTY, b.getCell(0,0));
+        assertEquals(Cell.EMPTY, b.getCell(1,1));
         assertEquals(Cell.EMPTY, b.getCell(2,2));
 	}
+
 	
-	private Object getCell(int i, int j) {
-		return null;
-	}
-	
-	private Object GameState() {
-		return null;
-	}
-	
-	//test to check the makeMove functionality of the board
 	@Test
     public void testMakeMove() {
       
