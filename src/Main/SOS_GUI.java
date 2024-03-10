@@ -147,6 +147,7 @@ public class SOS_GUI extends JFrame implements ActionListener {
         bluePlayer.add(blue_S);
         bluePlayer.add(blue_O);
         
+        //red player computer and human
         JLabel rpLabel = new JLabel("Red Player");
         rpLabel.setFont(new Font("Helvetica", Font.BOLD, 13));
         rpLabel.setBounds(520, 100, 150, 25);
@@ -167,10 +168,12 @@ public class SOS_GUI extends JFrame implements ActionListener {
 	    computer_Red.setActionCommand("ComputerRed");
 	    this.add(computer_Red);
 	    
+	    //red player button group for human and computer
         player_typeRed = new ButtonGroup();
         player_typeRed.add(humanRed);
         player_typeRed.add(computer_Red);
 	     
+        //S & 0 red player
         red_S = new JRadioButton("S");
         red_S.setFont(new Font("Tahoma", Font.PLAIN, 16));
         red_S.setBounds(520, 170, 150, 25);
@@ -186,20 +189,24 @@ public class SOS_GUI extends JFrame implements ActionListener {
         red_O.addActionListener(this);
         this.add(red_O);
         
+        //button group for red S & O
         ButtonGroup redPlayer = new ButtonGroup();
         redPlayer.add(red_S);
         redPlayer.add(red_O);
         
+        //record game check box
 		JCheckBox record = new JCheckBox("Record Game");
 		record.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		record.setBounds(18, 381, 129, 21);
 		this.add(record);
         
+		//current turn label
         JLabel ctLabel = new JLabel("Current Turn:");
         ctLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
         ctLabel.setBounds(185, 381, 101, 13);
         this.add(ctLabel);
         
+        //new game and replay buttons
         JButton newGame = new JButton("New Game");
 		newGame.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		newGame.setBounds(501, 366, 112, 26);
@@ -217,44 +224,64 @@ public class SOS_GUI extends JFrame implements ActionListener {
     }
 
     private void setContentPane() {
+    	
+    	//create game board canvas and dimensions
         gameBoardCanvas = new GameBoardCanvas();
         gameBoardCanvas.setPreferredSize(new Dimension(CELL_SIZE * game.size, CELL_SIZE * game.size));
         gameBoardCanvas.setBounds(150, 70, 300, 300);
 
+        //JLabel for the status bar
         gameStatusBar = new JLabel();
         gameStatusBar.setFont(new Font("Tahoma", Font.PLAIN, 16));
         gameStatusBar.setBounds(285, 381, 150, 15);
 
+        //get content pane of the JFrame and 
+        //add the game board canvas & status bar label
+        //to the content pane
         Container contentPane = getContentPane();
         contentPane.add(gameBoardCanvas);
         contentPane.add(gameStatusBar);
     }
     
+    
     @Override
     public void actionPerformed(ActionEvent e) { 
+    	
+    	//check if New Game is clicked
     	if (e.getActionCommand().equals("New Game")) {
+    		
+    		//Get the board size from the text field
     		int size = Integer.parseInt(boardSize.getText());
+    		
+    		//determine game mode
             String mode = gameMode.getSelection().getActionCommand();
+            
+            
             if (validSize(size)) {
                 if(mode.equals("General Game")) {
-                    JOptionPane.showMessageDialog(null, "You are playing a general game");
+                    JOptionPane.showMessageDialog(null, "This a general game.");
                     game = new general_game(size);
                 }
                 else if (mode.equals("Simple Game")) {
-                    JOptionPane.showMessageDialog(null, "You are playing a simple game");
+                    JOptionPane.showMessageDialog(null, "This a simple game.");
                     game = new simple_game(size);                    	
-                }                          
+                }    
+                
+                //adjust cell size
                 CELL_SIZE = 300 / game.size;
+                
+                //paint game board canvas
                 gameBoardCanvas.paintComponent(graph);
                 gameBoardCanvas.revalidate();
                 gameBoardCanvas.repaint();
             }
-            else {
+            else {  //display error message if invalid board size
                 JOptionPane.showMessageDialog(boardSize, "Please choose a valid size from 3-10", "Invalid game size", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
+    //board size cannot be less than 3 and greater than 10
     public boolean validSize(int size) {
         return size >= 3 && size <= 10;
     }
