@@ -6,12 +6,12 @@ import java.util.Random;
 
 public abstract class SOS_board {
     
-    public int size;
+    public int board_size;
     public enum Cell {EMPTY, S, O}
     public enum GameState {PLAYING, DRAW, B_WON, R_WON}
     public GameState currentGameState;
-    public final List<int[]> redWinningPatterns;
-    public final List<int[]> blueWinningPatterns;
+    public final List<int[]> redPlayerWinPatterns;
+    public final List<int[]> bluePlayerWinPatterns;
 
     protected Cell[][] grid;
     protected char turn;
@@ -21,23 +21,23 @@ public abstract class SOS_board {
     Random rand_num = new Random();
 
     public SOS_board(int size) {
-    	this.size = size;
+    	this.board_size = size;
         
-        redWinningPatterns = new ArrayList<>();
-        blueWinningPatterns = new ArrayList<>();
-        initBoard();
+        redPlayerWinPatterns = new ArrayList<>();
+        bluePlayerWinPatterns = new ArrayList<>();
+        initialize_Board();
     }
 
-    public void initBoard() {
-        grid = new Cell[size][size];
+    public void initialize_Board() {
+        grid = new Cell[board_size][board_size];
 
-        for (int row = 0; row < size; ++row) {
-            for (int col = 0; col < size; ++col) {
+        for (int row = 0; row < board_size; ++row) {
+            for (int col = 0; col < board_size; ++col) {
                 grid[row][col] = Cell.EMPTY;
             }
         }
-        redWinningPatterns.clear();
-        blueWinningPatterns.clear();
+        redPlayerWinPatterns.clear();
+        bluePlayerWinPatterns.clear();
         currentGameState = GameState.PLAYING;
         turn = 'B';
         totalMoves = 0;
@@ -46,7 +46,7 @@ public abstract class SOS_board {
     }
 
     public Cell getCell(int row, int column) {
-        if (row >= 0 && row < size && column >= 0 && column < size) {
+        if (row >= 0 && row < board_size && column >= 0 && column < board_size) {
             return grid[row][column];
         } else {
             return null;
@@ -54,7 +54,7 @@ public abstract class SOS_board {
     }
 
     public void setCell(int row, int column, Cell cell) {
-        if (row >= 0 && row < size && column >= 0 && column < size) {
+        if (row >= 0 && row < board_size && column >= 0 && column < board_size) {
             grid[row][column] = cell;
         }
     }
@@ -72,7 +72,7 @@ public abstract class SOS_board {
     }
     
     /*insert computer moves function here
-     * 
+     * WILL DO LATER
      */
     
     public boolean makeMove(int row, int column) {
@@ -83,22 +83,22 @@ public abstract class SOS_board {
         }
 
         totalMoves += 1;
-        int prevBPoints = 0;
-        int prevRPoints = 0;
+        int prevBluePoints = 0;
+        int prevRedPoints = 0;
         if (turn == 'B') {
             if (SOS_GUI.blue_S.isSelected()) {
                 setCell(row, column, Cell.S);
             } else if (SOS_GUI.blue_O.isSelected()){
                 setCell(row, column, Cell.O);
             }
-            prevBPoints = bluePoints;
+            prevBluePoints = bluePoints;
             bluePoints += checkSos(row, column);
-            if (prevBPoints == bluePoints) {
+            if (prevBluePoints == bluePoints) {
         		switchTurn();
         	}
-        	else if (prevBPoints < bluePoints) {
+        	else if (prevBluePoints < bluePoints) {
         		doNotSwitchTurn();
-            	prevBPoints += bluePoints;
+            	prevBluePoints += bluePoints;
         	}
         } else if (turn == 'R'){
             if (SOS_GUI.red_S.isSelected()) {
@@ -106,14 +106,14 @@ public abstract class SOS_board {
             } else if (SOS_GUI.red_O.isSelected()) {
                 setCell(row, column, Cell.O);
             }
-            prevRPoints = redPoints;
+            prevRedPoints = redPoints;
             redPoints += checkSos(row, column);
-            if (prevRPoints < redPoints) {
+            if (prevRedPoints < redPoints) {
         		doNotSwitchTurn();
         	}
-        	else if (prevRPoints == redPoints) {
+        	else if (prevRedPoints == redPoints) {
         		switchTurn();
-            	prevRPoints += redPoints;
+            	prevRedPoints += redPoints;
         	}
         }
         updateState();                
@@ -148,7 +148,7 @@ public abstract class SOS_board {
         Cell cell = getCell(row, col);
         if(cell == null || cell==Cell.EMPTY) return 0;
 
-        List<int[]> winningPatterns = (getTurn()=='R') ? redWinningPatterns : blueWinningPatterns;
+        List<int[]> winningPatterns = (getTurn()=='R') ? redPlayerWinPatterns : bluePlayerWinPatterns;
 
         int points = 0;
         if(cell == Cell.O){

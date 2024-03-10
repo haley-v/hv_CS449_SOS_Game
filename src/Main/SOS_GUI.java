@@ -227,7 +227,7 @@ public class SOS_GUI extends JFrame implements ActionListener {
     	
     	//create game board canvas and dimensions
         gameBoardCanvas = new GameBoardCanvas();
-        gameBoardCanvas.setPreferredSize(new Dimension(CELL_SIZE * game.size, CELL_SIZE * game.size));
+        gameBoardCanvas.setPreferredSize(new Dimension(CELL_SIZE * game.board_size, CELL_SIZE * game.board_size));
         gameBoardCanvas.setBounds(150, 70, 300, 300);
 
         //JLabel for the status bar
@@ -268,7 +268,7 @@ public class SOS_GUI extends JFrame implements ActionListener {
                 }    
                 
                 //adjust cell size
-                CELL_SIZE = 300 / game.size;
+                CELL_SIZE = 300 / game.board_size;
                 
                 //paint game board canvas
                 gameBoardCanvas.paintComponent(graph);
@@ -313,7 +313,7 @@ public class SOS_GUI extends JFrame implements ActionListener {
                     	}
                         game.updateState();      //update game state after the move
                     } else {
-                        game.initBoard();   //if game is not ongoing, initialize board for a new game
+                        game.initialize_Board();   //if game is not ongoing, initialize board for a new game
                     }
                     repaint();
                 }
@@ -334,24 +334,29 @@ public class SOS_GUI extends JFrame implements ActionListener {
             g.setColor(Color.BLACK);                   //color of grid lines
             
             //draw horizontal grid lines
-            for (int row = 1; row < game.size + 1; row++) {
+            for (int row = 1; row < game.board_size + 1; row++) {
             	g.fillRoundRect(0, CELL_SIZE * row - GRID_WIDTH_HALF, 
-            			CELL_SIZE * game.size - 1, GRID_WIDTH, GRID_WIDTH, GRID_WIDTH);
+            			CELL_SIZE * game.board_size - 1, GRID_WIDTH, GRID_WIDTH, GRID_WIDTH);
             }
             
             //draw vertical grid lines
-            for (int col = 1; col < game.size+ 1; col++) {
+            for (int col = 1; col < game.board_size+ 1; col++) {
                 g.fillRoundRect(CELL_SIZE * col - GRID_WIDTH_HALF, 0, GRID_WIDTH,
-						CELL_SIZE * game.size - 1, GRID_WIDTH, GRID_WIDTH);
+						CELL_SIZE * game.board_size - 1, GRID_WIDTH, GRID_WIDTH);
             }
         }
        
         private void drawBoard(Graphics g) {
             Graphics2D graph_2d = (Graphics2D) g;
-            for (int row = 0; row < game.size; row++) {
-                for (int col = 0; col < game.size; col++) {
+            
+            //loop through each cell in game board 
+            //and calculate coordinates for drawing symbols in the cell
+            for (int row = 0; row < game.board_size; row++) {
+                for (int col = 0; col < game.board_size; col++) {
                     int x1 = col * CELL_SIZE + CELL_PADDING;
 					int y2 = (row + 1) * CELL_SIZE - CELL_PADDING;
+					
+					//draw 'S' if the cell contains 'S'. otherwise draw 'O'
 					if (game.getCell(row, col) == Cell.S) {
                         graph_2d.setColor(Color.black);
                         graph_2d.setFont(new Font("Comic Sans", Font.BOLD, 20));
@@ -367,11 +372,13 @@ public class SOS_GUI extends JFrame implements ActionListener {
         }
         
         /*insert draw win line function here
-         * 
+         *  WILL DO LATER
          */
         
     
         private void printStatusBar() {
+        	
+        	//if the game is still ongoing, display which player's turn it is
             if (game.getGameState() == GameState.PLAYING) {
                 gameStatusBar.setForeground(Color.BLACK);
                 if (game.getTurn() == 'B') {
@@ -379,12 +386,18 @@ public class SOS_GUI extends JFrame implements ActionListener {
                 } else {
                     gameStatusBar.setText("Red Player's Turn");
                 }
+                
+                //if the game ends in a draw, display draw message in green
             }else if (game.getGameState() == GameState.DRAW) {
 				gameStatusBar.setForeground(Color.GREEN);
 				gameStatusBar.setText("It's a Draw!");
+				
+				//if the blue player wins, display a victory message in blue
 			} else if (game.getGameState() == GameState.B_WON) {
 				gameStatusBar.setForeground(Color.BLUE);
 				gameStatusBar.setText("Blue Won!");
+				
+				//if red player wins, display a victory message in red 
 			} else if (game.getGameState() == GameState.R_WON) {
 				gameStatusBar.setForeground(Color.RED);
 				gameStatusBar.setText("Red Won!");
@@ -392,6 +405,9 @@ public class SOS_GUI extends JFrame implements ActionListener {
         }
    }
     
+    /*
+     * main function will run the entire game/GUI
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {

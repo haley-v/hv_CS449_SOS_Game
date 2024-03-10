@@ -8,7 +8,7 @@ public class general_game extends SOS_board{
 	}
 	
 	public void checkForWin() {
-		int maxPossibleMoves = size * size;
+		int maxPossibleMoves = board_size * board_size;
 		
 		if(totalMoves < maxPossibleMoves)
 			currentGameState = GameState.PLAYING;

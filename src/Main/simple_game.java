@@ -10,7 +10,7 @@ public class simple_game extends SOS_board{
 	
 	public void checkForWin() {
 		int pointsToWin = 1; 
-		int maxPossibleMoves = size * size;
+		int maxPossibleMoves = board_size * board_size;
 		
 		if(bluePoints >= pointsToWin)
 			currentGameState = GameState.B_WON;
