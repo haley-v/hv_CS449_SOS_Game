@@ -6,20 +6,21 @@ import java.util.Random;
 
 public abstract class SOS_board {
     
-    public int board_size;
-    public enum Cell {EMPTY, S, O}
-    public enum GameState {PLAYING, DRAW, B_WON, R_WON}
+    public int board_size;               //game board size
+    public enum Cell {EMPTY, S, O}       //enum to represent cell states
+    public enum GameState {PLAYING, DRAW, B_WON, R_WON}   //represent game states
     public GameState currentGameState;
-    public final List<int[]> redPlayerWinPatterns;
+    public final List<int[]> redPlayerWinPatterns;        //lists to store winning patterns
     public final List<int[]> bluePlayerWinPatterns;
 
-    protected Cell[][] grid;
-    protected char turn;
+    protected Cell[][] grid;          //2D array to keep track of game board
+    protected char turn;             
     public int totalMoves;
 	public int bluePoints;
 	public int redPoints;
     Random rand_num = new Random();
 
+    //constructor to initialize the game board
     public SOS_board(int size) {
     	this.board_size = size;
         
@@ -29,6 +30,7 @@ public abstract class SOS_board {
     }
 
     public void initialize_Board() {
+    	//initialize with empty cells
         grid = new Cell[board_size][board_size];
 
         for (int row = 0; row < board_size; ++row) {
@@ -36,20 +38,25 @@ public abstract class SOS_board {
                 grid[row][col] = Cell.EMPTY;
             }
         }
+        
+        //clear the lists of winning patterns
         redPlayerWinPatterns.clear();
         bluePlayerWinPatterns.clear();
-        currentGameState = GameState.PLAYING;
-        turn = 'B';
+        
+        currentGameState = GameState.PLAYING;   //set initial game to playing
+        turn = 'B';       //game will start with Blue player
+        
+        //reset total moves and player points
         totalMoves = 0;
         bluePoints = 0;
         redPoints = 0;
     }
 
     public Cell getCell(int row, int column) {
-        if (row >= 0 && row < board_size && column >= 0 && column < board_size) {
+        if (row >= 0 && row < board_size && column >= 0 && column < board_size) {   //check if indices are within bounds
             return grid[row][column];
         } else {
-            return null;
+            return null;  //return null if indices are out of bounds
         }
     }
 
@@ -76,12 +83,13 @@ public abstract class SOS_board {
      */
     
     public boolean makeMove(int row, int column) {
+    	
+    	//get the cell at the specified row and column
         Cell cell = getCell(row, column);
-        if(cell != Cell.EMPTY){
+        if(cell != Cell.EMPTY){    //check if cell is not empty
             System.out.println("This cell is already occupied!");
             return false;
         }
-
         totalMoves += 1;
         int prevBluePoints = 0;
         int prevRedPoints = 0;
@@ -116,7 +124,9 @@ public abstract class SOS_board {
             	prevRedPoints += redPoints;
         	}
         }
-        updateState();                
+        updateState();  
+        
+        //output game score to the console
 		System.out.println("-------------------");
     	System.out.println(currentGameState);
         System.out.println("Blue Score-> "+bluePoints);
@@ -142,6 +152,11 @@ public abstract class SOS_board {
     		turn ='B';
     }
     
+    
+    /*
+     * checkSos function checks to see 
+     * which cells create an SOS 
+     */
 	public int checkSos(int row, int col)
 	{
         //bound check/empty check
