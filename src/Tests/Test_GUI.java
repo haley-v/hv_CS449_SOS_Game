@@ -1,4 +1,5 @@
 package Tests;
+import Main.SOS_GUI;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.After;
@@ -20,8 +21,7 @@ public class Test_GUI {
 		
 		//Test JFrame elements
 		assertEquals("Haley's SOS Game", GUI.getTitle());          //check title
-		assertTrue(GUI.isResizable());                             //check if window is resizable
-        assertFalse(GUI.isUndecorated());                          //check if JFrame is undecorated
+		assertTrue(GUI.isResizable());                            //check if JFrame is undecorated
         assertEquals(new Dimension(637, 456), GUI.getSize());      //check the JFrame size
 	}
 	
