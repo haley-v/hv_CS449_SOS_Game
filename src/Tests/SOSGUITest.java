@@ -10,7 +10,6 @@ public class SOSGUITest {
 
 	/*Test case that will check the validSize() 
 	 * method of the SOS_GUI class*/
-	
     @Test
     public void testValidSize() {
     	
@@ -43,6 +42,8 @@ public class SOSGUITest {
         assertTrue(simpleGame.isSelected());
         assertFalse(generalGame.isSelected());
     }
+    
+    
     
 
 }
