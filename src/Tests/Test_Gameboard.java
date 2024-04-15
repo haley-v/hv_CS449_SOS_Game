@@ -17,11 +17,10 @@ import org.junit.jupiter.api.BeforeEach;
 public class Test_Gameboard {
 	
 	private SOS_board b;
+	
 
-	/*
-	 * Need to rewrite tests.
-	 * experiencing errors
-	 */
+
+    
 	
 	//check initialization of the board
 	@Test
@@ -52,5 +51,9 @@ public class Test_Gameboard {
         assertFalse(b.makeMove(-1,0));
         assertFalse(b.makeMove(3,3));
     }
+	
+	
+	
+	
 
 }

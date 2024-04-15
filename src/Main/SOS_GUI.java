@@ -304,12 +304,16 @@ public class SOS_GUI extends JFrame implements ActionListener {
                     	if (game.getTurn()=='B') {
                     		if (blue.equals("Human"))
                     			game.makeMove(rowSelected, colSelected);
-                    		//implement computer player moves here in an else if  (will do later)
+                    		}
+                    		else if (blue.equals("ComputerBlue")) {
+                    			game.makeComputerMove();
                     		}
                     	else if (game.getTurn()=='R') {
                     		if (red.equals("Human"))
             					game.makeMove(rowSelected, colSelected);
-                    		//implement computer player moves here in an else if (will do later)
+                    		else if (red.equals("ComputerRed")) {
+                    			game.makeComputerMove();
+                    		}
                     	}
                         game.updateState();      //update game state after the move
                     } else {
