@@ -332,6 +332,7 @@ public class SOS_GUI extends JFrame implements ActionListener {
             drawBoard(g);                  
             graph = g; 
             printStatusBar();
+            drawWinLine(g);
         }
 
         private void drawGrid(Graphics g) {
@@ -375,9 +376,27 @@ public class SOS_GUI extends JFrame implements ActionListener {
             }
         }
         
-        /*insert draw win line function here
-         *  WILL DO LATER
-         */
+        private void drawWinLine(Graphics g) {
+            Graphics2D line = (Graphics2D) g;
+			line.setStroke(new BasicStroke(SYMBOL_STROKE_WIDTH, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+
+            line.setColor(Color.BLUE);
+            drawWinningPatterns(g, game.bluePlayerWinPatterns);
+
+            line.setColor(Color.RED);
+            drawWinningPatterns(g, game.redPlayerWinPatterns);
+		}
+
+        private void drawWinningPatterns(Graphics g, java.util.List<int[]> winningPatterns) {
+            int x1, y1, x2, y2;
+            for (int[] winningPattern : winningPatterns) {
+                y1 = winningPattern[0] * CELL_SIZE + CELL_SIZE/2;
+                x1 = winningPattern[1] * CELL_SIZE + CELL_SIZE/2;
+                y2 = winningPattern[2] * CELL_SIZE + CELL_SIZE/2;
+                x2 = winningPattern[3] * CELL_SIZE + CELL_SIZE/2;
+                g.drawLine(x1, y1, x2, y2);
+            }
+        }
         
     
         private void printStatusBar() {
