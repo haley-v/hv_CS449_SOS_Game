@@ -1,0 +1,4 @@
+-------------------
+R_WON
+Blue Score-> 0
+Red  Score-> 1

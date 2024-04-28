@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import java.io.*;;
+
 public abstract class SOS_board {
     
     public int board_size;               //game board size
@@ -12,6 +14,7 @@ public abstract class SOS_board {
     public GameState currentGameState;
     public final List<int[]> redPlayerWinPatterns;        //lists to store winning patterns
     public final List<int[]> bluePlayerWinPatterns;
+    public String filePath = "record.txt";
 
     protected Cell[][] grid;          //2D array to keep track of game board
     protected char turn;             
@@ -131,11 +134,36 @@ public abstract class SOS_board {
         }
         updateState();  
         
+        /*
         //output game score to the console
 		System.out.println("-------------------");
     	System.out.println(currentGameState);
         System.out.println("Blue Score-> "+bluePoints);
         System.out.println("Red  Score-> "+redPoints);
+        */
+        
+        
+        try {
+        	File file = new File(filePath);
+        	if (!file.exists()) {
+        		file.createNewFile();
+        	}
+        	BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        	writer.write("-------------------");
+        	writer.newLine();
+        	writer.write(currentGameState.name());
+        	writer.newLine();
+        	writer.write("Blue Score-> " + bluePoints);
+        	writer.newLine();
+        	writer.write("Red  Score-> " + redPoints);
+        	
+        	writer.close();
+        	
+        }
+        catch (IOException e) {
+        	System.out.println("An Error has occurred: " + e.getMessage());
+        	e.printStackTrace();
+        }
         return true;
     } 
 
